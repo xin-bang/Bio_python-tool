@@ -34,3 +34,37 @@ python Freq_cal.py -i example_data/H9N2_HA_gene_pro.fas -o example_data/H9N2_HA_
 python Freq_cal.py -i example_data/H9N2_HA_gene_pro.fas -o example_data/H9N2_HA_gene_pro_row -model row -type pro -ignore_gap False
 
 ```
+
+
+
+## 用于Genebank文件中获取相应的序列及信息
+
+主要功能：用于从NCBI数据库下载的GenebanK格式的文件中索引CDS序列、Protein序列、Metadata信息等。
+
+```python
+usage: gbk_handle.py [-h] [-i] [-o] [-seek]
+
+Get what you want in your genebank file, For example: python gbk_handle.py -i input -o output -seek 'pro/cds/metadata'
+
+options:
+  -h, --help  show this help message and exit
+  -i          genebank file
+  -o          the output result
+  -seek       Choose which part you want to seek. Here we offer three modes of seeking. 'pro': Get Protein sequence from Genebank.    
+              'cds': Get CDS sequence from Genebank. 'metadata': Get meta-information from Genebank and output non Excel tables. Meta-  
+              information include accession number,organism,cds length,pro length,strain,country,collection_date,host,Defintion Of    
+              course,this information you can download XML file from NCBI database
+```
+
+* Eaxmple:
+
+  ```python
+  #从Genebank文件中获得CDS序列：
+  python gbk_handle.py -i example_data/M_tuberculosis.gbff -o example_data/M_tuberculosis.cds.fasta -seek cds
+
+  #从Genebank文件中获得protein序列：
+  python gbk_handle.py -i example_data/M_tuberculosis.gbff -o example_data/M_tuberculosis.pro.fasta -seek pro
+
+  #从Genebank文件中获得相应的metadata信息：
+  python gbk_handle.py -i example_data/H9N2_HA_gene.gb -o example_data/H9N2_HA_gene.metadata -seek metadata
+  ```

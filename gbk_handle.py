@@ -27,7 +27,6 @@ args = parser.parse_args()
 file1 = "M_tuberculosis.gbff"
 # file1 = args.i
 
-
 def get_pro(file1):
     with open(file1, "r") as gb_file:
         for record in SeqIO.parse(gb_file, "genbank"):

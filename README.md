@@ -35,9 +35,7 @@ python Freq_cal.py -i example_data/H9N2_HA_gene_pro.fas -o example_data/H9N2_HA_
 
 ```
 
-
-
-## 用于Genebank文件中获取相应的序列及信息
+## gbk_handle.py 用于Genebank文件中获取相应的序列及信息
 
 主要功能：用于从NCBI数据库下载的GenebanK格式的文件中索引CDS序列、Protein序列、Metadata信息等。
 
@@ -50,9 +48,9 @@ options:
   -h, --help  show this help message and exit
   -i          genebank file
   -o          the output result
-  -seek       Choose which part you want to seek. Here we offer three modes of seeking. 'pro': Get Protein sequence from Genebank.    
+  -seek       Choose which part you want to seek. Here we offer three modes of seeking. 'pro': Get Protein sequence from Genebank.  
               'cds': Get CDS sequence from Genebank. 'metadata': Get meta-information from Genebank and output non Excel tables. Meta-  
-              information include accession number,organism,cds length,pro length,strain,country,collection_date,host,Defintion Of    
+              information include accession number,organism,cds length,pro length,strain,country,collection_date,host,Defintion Of  
               course,this information you can download XML file from NCBI database
 ```
 

@@ -24,8 +24,8 @@ args = parser.parse_args()
 
 # file1 = open(args.i,'r')
 # file1 = open("sequence.gb","r")
-# file1 = "M_tuberculosis.gbff"
-file1 = args.i
+file1 = "M_tuberculosis.gbff"
+# file1 = args.i
 
 
 def get_pro(file1):
@@ -48,56 +48,58 @@ def get_pro(file1):
                             f.write(result)
 
 
-def get_cds(file1):
-    with open(file1, "r") as gb_file:
-        for record in SeqIO.parse(gb_file, "genbank"):
-            sub_seq = 0  # 这里设置sub_seq为全局变量，这样在第一个if语句中得到的sub_seq可以在全局使用
-            for feature in record.features:
-                if feature.type == "CDS":
-                    protein_id = feature.qualifiers['protein_id'][0]
-                    product = feature.qualifiers["product"][0]
-                    gene_id = str(feature.qualifiers.get('gene', None)).replace(
-                        '\'', '').replace('[', '').replace(']', '')
-                    # feature.location.extract()是位于location下的一个方法，包含起始位置以及正反链信息，加入record，表示从该SeqRecord中提取该序列
-                    sub_seq = feature.location.extract(record).seq
-                    result = (
-                        f">{protein_id}_{record.id}_{gene_id}_({product})\n{sub_seq}\n")
-                    with open(args.o, 'a') as f:
-                        f.write(result)
-
-
-# def get_cds(file1):  # 使用while循环
+# def get_cds(file1):
 #     with open(file1, "r") as gb_file:
 #         for record in SeqIO.parse(gb_file, "genbank"):
 #             sub_seq = 0  # 这里设置sub_seq为全局变量，这样在第一个if语句中得到的sub_seq可以在全局使用
-#             i = 0
-#             while i < len(record.features):
-#                 feature = record.features[i]
-#                 if feature.type == "gene":
-#                     seq_start = feature.location.nofuzzy_start
-#                     seq_end = feature.location.nofuzzy_end
-#                     strand = feature.location.strand
-#                     if strand == 1:
-#                         sub_seq = record.seq[seq_start:seq_end]
-#                     else:
-#                         sub_seq = record.seq[seq_start:seq_end].reverse_complement(
-#                         )
-#                 i += 1
-#                 while i < len(record.features) and record.features[i].type != 'CDS':
-#                     i += 1
-#                 if i < len(record.features):
-#                     feature = record.features[i]
+#             for feature in record.features:
+#                 if feature.type == "CDS":
 #                     protein_id = feature.qualifiers['protein_id'][0]
 #                     product = feature.qualifiers["product"][0]
 #                     gene_id = str(feature.qualifiers.get('gene', None)).replace(
 #                         '\'', '').replace('[', '').replace(']', '')
+#                     # feature.location.extract()是位于location下的一个方法，包含起始位置以及正反链信息，加入record，表示从该SeqRecord中提取该序列
+#                     sub_seq = feature.location.extract(record).seq
 #                     result = (
 #                         f">{protein_id}_{record.id}_{gene_id}_({product})\n{sub_seq}\n")
-#                     i = i + 1
 #                     with open(args.o, 'a') as f:
 #                         f.write(result)
-#                 else:
-#                     i += 1
+
+
+
+def get_cds(file1):  # 使用while循环
+    with open(file1, "r") as gb_file:
+        for record in SeqIO.parse(gb_file, "genbank"):
+            sub_seq = 0  # 这里设置sub_seq为全局变量，这样在第一个if语句中得到的sub_seq可以在全局使用
+            i = 1
+            while i < len(record.features):
+                feature = record.features[i]
+                while feature.type == "gene":
+                    seq_start = feature.location.nofuzzy_start
+                    seq_end = feature.location.nofuzzy_end
+                    strand = feature.location.strand
+                    if strand == 1:
+                        sub_seq = record.seq[seq_start:seq_end]
+                    else:
+                        sub_seq = record.seq[seq_start:seq_end].reverse_complement(
+                        )
+                    i += 1
+                    feature = record.features[i]
+                if i < len(record.features) and feature.type == 'CDS':
+                    feature = record.features[i]
+                    protein_id = feature.qualifiers['protein_id'][0]
+                    product = feature.qualifiers["product"][0]
+                    gene_id = str(feature.qualifiers.get('gene', None)).replace(
+                        '\'', '').replace('[', '').replace(']', '')
+                    result = (
+                        f">{protein_id}_{record.id}_{gene_id}_({product})\n{sub_seq}\n")
+                    i = i + 1
+                    with open(args.o, 'a') as f:
+                        f.write(result)
+                else:
+                    i += 1
+
+
 
 
 def get_metadata(file1):
